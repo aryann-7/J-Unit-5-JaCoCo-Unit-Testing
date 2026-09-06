@@ -3,6 +3,8 @@ package fj.usp.cs341.sectiona;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -138,7 +140,7 @@ class EmployeeTest {
         @DisplayName("Threshold Boundaries (49/50/51, 69/70/71, 84/85/86)")
         class ThresholdBoundaries {
 
-            // Boundary test for (needs improvement) vs (meets expectations & bonus eligibility)
+            //Boundary test cases for (needs improvement) vs (meets expectations & bonus eligibility)
             @Test
             @DisplayName("BVA: Score 49 (Upper bound of Needs Improvement) -> Needs Improvement, Not Bonus Eligible")
             void boundaryScoreFortyNine() {
@@ -163,7 +165,7 @@ class EmployeeTest {
                 assertTrue(employee.isBonusEligible());
             }
 
-            // Boundary test for (meets expectations) vs (exceeds expectations)
+            //Boundary test cases for (meets expectations) vs (exceeds expectations)
             @Test
             @DisplayName("BVA: Score 69 (Upper bound of Meets Expectations) -> Meets Expectations, Bonus Eligible")
             void boundaryScoreSixtyNine() {
@@ -188,7 +190,7 @@ class EmployeeTest {
                 assertTrue(employee.isBonusEligible());
             }
 
-            // Boundary: Exceeds Expectations vs Outstanding (85)
+            //Boundary test cases for (exceeds expectations) vs (outstanding)
             @Test
             @DisplayName("BVA: Score 84 (Upper bound of Exceeds Expectations) -> Exceeds Expectations, Bonus Eligible")
             void boundaryScoreEightyFour() {
@@ -211,6 +213,78 @@ class EmployeeTest {
                 Employee employee = new Employee("John Doe", 86);
                 assertEquals("Outstanding", employee.getRating());
                 assertTrue(employee.isBonusEligible());
+            }
+        }
+    }
+    //Negative test cases (input validation & exception assertions)
+    @Nested
+    @DisplayName("Negative Tests - Invalid Input Validation")
+    class NegativeTests {
+
+        @Nested
+        @DisplayName("Invalid Name Validation")
+        class InvalidNameTests {
+
+            @Test
+            @DisplayName("Null name should throw IllegalArgumentException with exact message")
+            void nullNameThrowsException() {
+                IllegalArgumentException exception = assertThrows(
+                        IllegalArgumentException.class,
+                        () -> new Employee(null, 75));
+                assertEquals("Employee name must not be null or empty", exception.getMessage());
+            }
+
+            @Test
+            @DisplayName("Empty string name should throw IllegalArgumentException with exact message")
+            void emptyNameThrowsException() {
+                IllegalArgumentException exception = assertThrows(
+                        IllegalArgumentException.class,
+                        () -> new Employee("", 75));
+                assertEquals("Employee name must not be null or empty", exception.getMessage());
+            }
+
+            @Test
+            @DisplayName("Whitespace-only name should throw IllegalArgumentException with exact message")
+            void whitespaceOnlyNameThrowsException() {
+                IllegalArgumentException exception = assertThrows(
+                        IllegalArgumentException.class,
+                        () -> new Employee("   ", 75));
+                assertEquals("Employee name must not be null or empty", exception.getMessage());
+            }
+
+            @ParameterizedTest(name = "Invalid whitespace name: \"{0}\"")
+            @ValueSource(strings = { " ", "  ", "\t", "\n", "\t\n " })
+            @DisplayName("Various whitespace combinations for name should throw IllegalArgumentException")
+            void variousWhitespaceNamesThrowException(String invalidName) {
+                IllegalArgumentException exception = assertThrows(
+                        IllegalArgumentException.class,
+                        () -> new Employee(invalidName, 75));
+                assertEquals("Employee name must not be null or empty", exception.getMessage());
+            }
+        }
+
+        @Nested
+        @DisplayName("Invalid Score Validation")
+        class InvalidScoreTests {
+
+            @ParameterizedTest(name = "Invalid negative score: {0}")
+            @ValueSource(ints = { -1, -5, -25, -100 })
+            @DisplayName("Scores below 0 should throw IllegalArgumentException with exact message")
+            void scoresBelowZeroThrowException(int invalidScore) {
+                IllegalArgumentException exception = assertThrows(
+                        IllegalArgumentException.class,
+                        () -> new Employee("Valid Name", invalidScore));
+                assertEquals("Score must be between 0 and 100", exception.getMessage());
+            }
+
+            @ParameterizedTest(name = "Invalid excessive score: {0}")
+            @ValueSource(ints = { 101, 105, 150, 200, 1000 })
+            @DisplayName("Scores above 100 should throw IllegalArgumentException with exact message")
+            void scoresAboveOneHundredThrowException(int invalidScore) {
+                IllegalArgumentException exception = assertThrows(
+                        IllegalArgumentException.class,
+                        () -> new Employee("Valid Name", invalidScore));
+                assertEquals("Score must be between 0 and 100", exception.getMessage());
             }
         }
     }
