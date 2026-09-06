@@ -76,7 +76,7 @@ class EmployeeTest {
         }
     }
 
-    //Boundary value test cases
+    //Boundary value (BVA) test cases
     @Nested
     @DisplayName("Boundary Value Analysis (BVA) Tests")
     class BoundaryValueAnalysisTests {
