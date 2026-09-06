@@ -38,7 +38,7 @@ class EmployeeTest {
         }
     }
 
-    //Equivalence Partitioning test cases (nominal values)
+    //Equivalence Partitioning test cases (nominal values for each partition)
     @Nested
     @DisplayName("Equivalence Partitioning (EP) - Valid Partitions")
     class EquivalencePartitioningTests {
