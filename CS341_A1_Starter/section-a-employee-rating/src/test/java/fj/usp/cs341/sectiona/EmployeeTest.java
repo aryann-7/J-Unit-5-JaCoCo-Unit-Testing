@@ -140,7 +140,7 @@ class EmployeeTest {
         @DisplayName("Threshold Boundaries (49/50/51, 69/70/71, 84/85/86)")
         class ThresholdBoundaries {
 
-            //Boundary test cases for (needs improvement) vs (meets expectations & bonus eligibility)
+            // Boundary test for (needs improvement) vs (meets expectations & bonus eligibility)
             @Test
             @DisplayName("BVA: Score 49 (Upper bound of Needs Improvement) -> Needs Improvement, Not Bonus Eligible")
             void boundaryScoreFortyNine() {
@@ -165,7 +165,7 @@ class EmployeeTest {
                 assertTrue(employee.isBonusEligible());
             }
 
-            //Boundary test cases for (meets expectations) vs (exceeds expectations)
+            // Boundary test for (meets expectations) vs (exceeds expectations)
             @Test
             @DisplayName("BVA: Score 69 (Upper bound of Meets Expectations) -> Meets Expectations, Bonus Eligible")
             void boundaryScoreSixtyNine() {
@@ -190,7 +190,7 @@ class EmployeeTest {
                 assertTrue(employee.isBonusEligible());
             }
 
-            //Boundary test cases for (exceeds expectations) vs (outstanding)
+            // Boundary: Exceeds Expectations vs Outstanding (85)
             @Test
             @DisplayName("BVA: Score 84 (Upper bound of Exceeds Expectations) -> Exceeds Expectations, Bonus Eligible")
             void boundaryScoreEightyFour() {
@@ -216,7 +216,10 @@ class EmployeeTest {
             }
         }
     }
-    //Negative test cases (input validation & exception assertions)
+
+    // =========================================================================
+    // 4. Negative Tests (Input Validation & Exception Assertions)
+    // =========================================================================
     @Nested
     @DisplayName("Negative Tests - Invalid Input Validation")
     class NegativeTests {
@@ -286,6 +289,42 @@ class EmployeeTest {
                         () -> new Employee("Valid Name", invalidScore));
                 assertEquals("Score must be between 0 and 100", exception.getMessage());
             }
+        }
+    }
+
+    // =========================================================================
+    // 5. Summary String Formatting Tests
+    // =========================================================================
+    @Nested
+    @DisplayName("Summary String Format Tests")
+    class SummaryTests {
+
+        @Test
+        @DisplayName("getSummary() for score 90 (Outstanding, Bonus Eligible)")
+        void summaryForOutstanding() {
+            Employee employee = new Employee("Ana Singh", 90);
+            assertEquals("Ana Singh - Outstanding - Bonus Eligible", employee.getSummary());
+        }
+
+        @Test
+        @DisplayName("getSummary() for score 75 (Exceeds Expectations, Bonus Eligible)")
+        void summaryForExceedsExpectations() {
+            Employee employee = new Employee("Bob Kumar", 75);
+            assertEquals("Bob Kumar - Exceeds Expectations - Bonus Eligible", employee.getSummary());
+        }
+
+        @Test
+        @DisplayName("getSummary() for score 60 (Meets Expectations, Bonus Eligible)")
+        void summaryForMeetsExpectations() {
+            Employee employee = new Employee("Charlie Brown", 60);
+            assertEquals("Charlie Brown - Meets Expectations - Bonus Eligible", employee.getSummary());
+        }
+
+        @Test
+        @DisplayName("getSummary() for score 30 (Needs Improvement, Not Bonus Eligible)")
+        void summaryForNeedsImprovement() {
+            Employee employee = new Employee("David Lee", 30);
+            assertEquals("David Lee - Needs Improvement - Not Bonus Eligible", employee.getSummary());
         }
     }
 }
