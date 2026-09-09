@@ -35,17 +35,26 @@
                 <version>3.2.5</version>
             </plugin>
 
-            <!--
-                TASK 3: Add the JaCoCo plugin here.
-
-                You need to bind the 'prepare-agent' goal (so coverage is recorded
-                while the tests run) and the 'report' goal (so the HTML report is
-                produced). Bind 'report' to a phase that runs during 'mvn verify'.
-
-                After configuring it:
-                    mvn clean verify
-                then open target/site/jacoco/index.html
-            -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
