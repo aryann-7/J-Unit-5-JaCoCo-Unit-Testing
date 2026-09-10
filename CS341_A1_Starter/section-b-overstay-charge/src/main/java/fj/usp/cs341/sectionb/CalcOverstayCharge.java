@@ -50,7 +50,7 @@ public class CalcOverstayCharge {
      */
     public static double computeOverstayCharge(int hoursOverstayed, int vehicleType, int permitType) {
 
-        if (hoursOverstayed < MIN_HOURS) {
+        if (hoursOverstayed < MIN_HOURS || hoursOverstayed > MAX_HOURS) {
             return INVALID;
         }
 
@@ -58,25 +58,25 @@ public class CalcOverstayCharge {
             return INVALID;
         }
 
-        if (vehicleType == VEHICLE_TRUCK) {
-            return hoursOverstayed * 15.0;
-        }
-
         if (permitType != PERMIT_VISITOR && permitType != PERMIT_RESIDENT) {
             return INVALID;
+        }
+
+        if (vehicleType == VEHICLE_TRUCK) {
+            return hoursOverstayed * 15.0;
         }
 
         if (permitType == PERMIT_VISITOR) {
             if (hoursOverstayed <= 4) {
                 return hoursOverstayed * 2.0;
             }
-            if (hoursOverstayed <= 13) {
+            if (hoursOverstayed <= 12) {
                 return hoursOverstayed * 4.0;
             }
             return hoursOverstayed * 8.0;
         }
 
-        if (hoursOverstayed < 12) {
+        if (hoursOverstayed <= 12) {
             return hoursOverstayed * 1.0;
         }
         return hoursOverstayed * 3.0;
